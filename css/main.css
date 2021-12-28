@@ -38,6 +38,33 @@
   left: -29px;
   z-index: 1; }
 
+.timeline-card-danger {
+  border-left-color: red; }
+
+.timeline-card-danger:before {
+  border-color: red; }
+
+.timeline-card-danger:after {
+  background-color: red; }
+
+.timeline-card-yellow {
+  border-left-color: yellowgreen; }
+
+.timeline-card-yellow:before {
+  border-color: yellowgreen; }
+
+.timeline-card-yellow:after {
+  background-color: yellowgreen; }
+
+.timeline-card-brown {
+  border-left-color: brown; }
+
+.timeline-card-brown:before {
+  border-color: brown; }
+
+.timeline-card-brown:after {
+  background-color: brown; }
+
 .timeline-card-primary {
   border-left-color: #4A89DC; }
 
@@ -120,13 +147,13 @@ footer a:not(.nav-link) {
     border-radius: 0; }
   .cover.shadow-lg {
     box-shadow: none !important; }
-  .cover-bg {
+  /* .cover-bg {
     padding: 5rem !important;
-    padding-bottom: 10px !important; }
+    padding-bottom: 10px !important; } */
   .avatar {
     margin-top: -10px; }
-  .about-section {
-    padding: 6.5rem 5rem 2rem !important; }
+  /* .about-section {
+    padding: 6.5rem 5rem 2rem !important; } */
   .skills-section,
   .work-experience-section,
   .education-section,
