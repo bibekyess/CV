@@ -76,3 +76,44 @@ footer a:not(.nav-link) {
 }
 
 
+.video-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(40%, 1fr));
+  grid-gap: 20px;
+  align-items: center;
+  margin-left: -45px;
+  margin-top: 40px;
+}
+
+@media only screen and (max-width: 600px) {
+  .video-container {
+    grid-template-columns: repeat(auto-fit, minmax(85%, 1fr));
+  }
+}
+
+.video-item {
+  width: 100%;
+  margin: 0 10px;
+}
+.video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 8px;
+}
+
+.video-title {
+  text-align: center;
+  padding: 10px 0;
+  font-weight: bold;
+}
