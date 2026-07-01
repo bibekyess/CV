@@ -117,3 +117,14 @@ footer a:not(.nav-link) {
   padding: 10px 0;
   font-weight: bold;
 }
+
+.disabled-link {
+    pointer-events: auto;      /* Keep hover events for the tooltip */
+    cursor: not-allowed;       /* Red "no entry" cursor on most systems */
+    opacity: 0.6;
+}
+
+.disabled-link:hover,
+.disabled-link:focus {
+    cursor: not-allowed;
+}
