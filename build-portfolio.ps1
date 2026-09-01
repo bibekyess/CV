@@ -31,7 +31,7 @@ if (-not $chrome) { throw "Could not find chrome.exe in any of the usual install
 Write-Host "Building portfolio.html ..." -ForegroundColor Cyan
 pandoc $src `
   --standalone `
-  --from gfm+yaml_metadata_block `
+  --from gfm+yaml_metadata_block+smart `
   --to html5 `
   --css 'css/portfolio.css' `
   --toc --toc-depth=2 `

@@ -5,7 +5,26 @@
   --accent: #4a89dc;
   --ink: #212529;
   --muted: #6c757d;
+  /* Metadata rows sit at --meta, a step darker than --muted: the Tools and Role
+     lines are what a reader greps for, so they can't fade into the page. */
+  --meta: #4b5563;
   --rule: #e5e7eb;
+  --page: #ffffff;
+  --code-bg: #f3f4f6;
+}
+
+/* Screen-only, so the generated PDF is always the light rendering regardless of
+   what colour scheme the machine running the build prefers. */
+@media screen and (prefers-color-scheme: dark) {
+  :root {
+    --accent: #7aa9e8;
+    --ink: #e6e8eb;
+    --muted: #98a1ab;
+    --meta: #b3bcc6;
+    --rule: #2c3238;
+    --page: #16191c;
+    --code-bg: #23282d;
+  }
 }
 
 body {
@@ -14,7 +33,10 @@ body {
   font-size: 16px;
   line-height: 1.6;
   color: var(--ink);
-  max-width: 46rem;
+  background: var(--page);
+  /* ~70 characters per line. The prose here runs dense, so the measure has to
+     stay inside the comfortable band or paragraphs turn into slabs. */
+  max-width: 40rem;
   margin: 0 auto;
   padding: 3rem 1.5rem 4rem;
 }
@@ -45,7 +67,8 @@ h1.title {
 }
 
 p.subtitle,
-p.author {
+p.author,
+p.date {
   margin: 0.35rem 0 0;
   color: var(--muted);
   font-size: 0.95rem;
@@ -55,6 +78,21 @@ p.author {
   font-weight: 600;
   color: var(--ink);
   font-size: 1.05rem;
+}
+
+/* Contact line + "Updated <month>" stamp. Pandoc puts the `date` metadata here. */
+p.date {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+
+p.date a {
+  border-bottom-color: transparent;
+}
+
+p.date a:hover {
+  border-bottom-color: var(--accent);
 }
 
 /* --- Table of contents ------------------------------------------------- */
@@ -96,6 +134,13 @@ nav#TOC ul ul a:hover {
   color: var(--accent);
 }
 
+/* Years and form-factor badges are noise in a contents list and they push the two
+   columns into heavy wrapping. They're right there on every heading in the body. */
+nav#TOC .year,
+nav#TOC .tag {
+  display: none;
+}
+
 /* --- Section headings (h1) and project headings (h2) ------------------- */
 
 h1:not(.title) {
@@ -111,7 +156,15 @@ h1:not(.title) {
 h2 {
   font-size: 1.3rem;
   line-height: 1.3;
-  margin: 2rem 0 0.75rem;
+  margin: 2.75rem 0 0.75rem;
+}
+
+/* A hairline between consecutive projects. Keyed off the preceding metadata list
+   so the first project in each section is skipped — its section heading already
+   carries a rule, and two would stack. */
+body > ul + h2 {
+  border-top: 1px solid var(--rule);
+  padding-top: 2.25rem;
 }
 
 /* One-line italic subtitle directly under a section heading. */
@@ -139,6 +192,26 @@ h1:not(.title) .year {
   white-space: nowrap;
 }
 
+/* Form-factor badge on a Selected Projects heading: Web app / Mobile app /
+   Desktop app / MCP server. Border-only rather than filled, because headless
+   Chrome drops background fills out of the PDF unless print-color-adjust is
+   forced, and a hairline reads better than a grey block at 8pt anyway. */
+h2 .tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--accent);
+  border: 1px solid rgba(74, 137, 220, 0.4);
+  border-radius: 999px;
+  padding: 0.1em 0.5em;
+  margin-left: 0.45rem;
+  /* Nudged up so the pill centres on the cap height, not the baseline. */
+  vertical-align: 0.18em;
+  white-space: nowrap;
+}
+
 /* Keep each project heading with the paragraph that follows it. */
 h1,
 h2 {
@@ -148,7 +221,7 @@ h2 {
 
 p {
   margin: 0 0 1rem;
-  text-align: justify;
+  text-align: left;
 }
 
 /* --- The Tools / Role / Links metadata list ---------------------------- */
@@ -160,7 +233,7 @@ body > ul {
   border-left: 3px solid var(--rule);
   padding: 0.5rem 0 0.5rem 1rem;
   font-size: 0.9rem;
-  color: var(--muted);
+  color: var(--meta);
 }
 
 body > ul li {
@@ -179,7 +252,7 @@ body > ul li strong {
 code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.875em;
-  background: #f3f4f6;
+  background: var(--code-bg);
   padding: 0.1em 0.3em;
   border-radius: 3px;
 }
@@ -206,6 +279,11 @@ code {
 
   h1.title {
     font-size: 22pt;
+  }
+
+  /* The links in the contact line are the only way to reach them from paper. */
+  p.date {
+    font-size: 8.5pt;
   }
 
   h1:not(.title) {
