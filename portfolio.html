@@ -183,25 +183,28 @@ One to three paragraphs of prose. What it is, what you did, what came out of it.
 <p><em>Products, designed and built end to end.</em></p>
 <h2 id="khururuai-work-in-flow-web-app-2026">KhururuAI: Work in Flow
 <span class="tag">Web app</span> <span class="year">(2026)</span></h2>
-<!-- year: 2026 | tags: agentic-ai, llm, platform, langgraph, rag, microservices | featured: true -->
+<!-- year: 2026 | tags: agentic-ai, llm, langgraph, rag, microservices | featured: true -->
 
 <p><strong>The point of this project is access.</strong> Capable AI
-tools price out exactly the people who would gain most from them, while
-every major provider (Groq, Cerebras, NVIDIA, Google, Mistral) gives
-away a free tier that goes unclaimed because claiming it means holding
-an API key. KhururuAI pools that free capacity into a product anyone can
-just open and use: no payment, no API key, and no account at all for the
-first five turns. It runs today on my own pooled keys, roughly
-<strong>2.3B tokens</strong> of budget; the version I’m working toward
-provisions each user’s <em>own</em> free tier at sign-in, so the ceiling
-scales with users instead of being divided among them.</p>
+tools price out the people who would gain most from them, while every
+major provider (Groq, Cerebras, NVIDIA, Google, Mistral) gives away a
+free tier that goes unclaimed because claiming it means holding an API
+key. KhururuAI pools that free capacity into a product anyone can just
+open and use: no payment, no API key, no account at all for the first
+five turns. It runs today on my own pooled keys, roughly <strong>2.3B
+tokens</strong> of budget; the version I’m working toward provisions
+each user’s <em>own</em> free tier at sign-in, so the ceiling scales
+with users instead of being divided among them, and extends the agents
+to Nepali language work: drafting, and filling out forms in Nepali.</p>
 <p>A user writes what they want in plain language, an LLM router picks
 one of six specialists, and that specialist returns the finished thing:
 a researched answer with live citations, a slide deck, a PDF, working
 code, an image, or ordinary conversation. Uploaded documents are parsed,
-embedded and retrieved with page-accurate citations. Turns stream over
-SSE as typed events, so the interface names the specialist at ~1–2s and
-the model that is writing before the first token exists.</p>
+embedded and retrieved with page-accurate citations, <strong>PDF, DOCX,
+HWP and HWPX alike</strong>, so the formats people actually receive are
+not a reason to be locked out. Turns stream over SSE as typed events, so
+the interface names the specialist at ~1–2s and the model that is
+writing before the first token exists.</p>
 <p>Staying free without falling over is the engineering problem. One
 OpenAI-compatible gateway fronts every provider, collapsing three vendor
 SDKs into a single client where “which provider” becomes “which model
@@ -272,8 +275,8 @@ Compose, Caddy, pytest, uv</li>
 server-side state handles (no numeric values in context); three-tier
 exact-count resolution over a non-aggregating API; deterministic
 data-shape → chart-type selection; entity-normalized co-occurrence
-network construction; provider-swappable LLM layer (OpenAI /
-Anthropic)</li>
+network construction; LLM access through the same OpenAI-compatible
+gateway as KhururuAI, so it runs on pooled free-tier</li>
 <li><strong>Links:</strong> <a
 href="https://charak.khururu.com">charak.khururu.com</a> · <a
 href="https://github.com/bibekyess/Query-to-Visualization">GitHub</a></li>
@@ -283,39 +286,39 @@ href="https://github.com/bibekyess/Query-to-Visualization">GitHub</a></li>
 <!-- year: 2026 | tags: full-stack, nextjs, payload-cms, llm, self-hosted, devops | featured: true -->
 
 <p><strong>Built to survive being handed over.</strong> Bintech is a B2B
-hardware supplier in Nepal. I shipped the whole thing solo: public site,
-staff CRM, AI assistant, and the server it runs on. Nobody there writes
-code, so the design is only correct if a salesperson can add a product,
-publish it and answer a customer without me. That put the catalogue in
-Payload CMS 3 over Postgres with real access control (anonymous reads
-constrained <em>by query</em> to published, staff see drafts) and admin
-copy written for the person typing into it. Inquiries invert the usual
-permissions: the public creates but can’t read, staff read but the
-submitted fields are read-only, so the only editable thing is the New →
-Contacted → Closed status.</p>
-<p>Failure modes took most of the attention. Every catalogue query falls
-back to a static array, so the image builds with no database and a
-Postgres outage degrades to the seed catalogue instead of a blank page;
-inquiry emails fire from a post-persist hook, so an SMTP outage costs a
-notification, never a lead.</p>
-<p>The assistant is deliberately the boring kind. Each request flattens
-the live catalogue into one compact line per product behind a 60s cache
-and pins it into a guardrailed system prompt that forbids inventing
-prices and hard-codes the only two legal URL shapes (LLMs cheerfully
-guess <code>/products/monitors</code>, which 404s). Answers stream back
-as plain-text deltas; the provider key never reaches the browser,
-requests are per-IP rate-limited and length-capped, and each completion
-logs one structured line so a truncated answer is diagnosable from logs
-rather than guessed at.</p>
-<p><strong>Grounding beats fine-tuning here.</strong> A price edit in
-the CRM is live in the bot’s answers within a cache window, and it
-cannot quote a number that isn’t in the database. It self-hosts on one
-VPS via Docker Compose behind Caddy, deployed by a GitHub Actions job
-holding no repo permissions against an SSH key locked server-side to a
-forced command. Domain, DNS and company mailboxes are mine too.</p>
+hardware supplier in Nepal, and I built all of it: site, CRM, assistant,
+server. Nobody there writes code, so the design is only correct if a
+salesperson can add a product, publish it and answer a customer without
+me. So the catalogue lives in Payload CMS 3 on Postgres: staff add and
+publish products from a browser admin panel, with the field labels
+written for a salesperson rather than for me. Who can see what is
+enforced inside the database query rather than filtered out in code
+afterwards, so an unpublished draft is never fetched for a visitor at
+all. Inquiries work the opposite way: anyone can submit one, nobody
+outside the company can read them, and staff can read but not edit what
+the customer wrote. The only editable field is the status, New →
+Contacted → Closed.</p>
+<p>The site is built to keep working when its dependencies don’t: every
+catalogue query falls back to a built-in list of products, so a Postgres
+outage degrades to that list instead of a blank page, and inquiry emails
+are sent only after the lead is saved to the database, so a mail outage
+costs a notification, never a lead. It self-hosts on one VPS via Docker
+Compose behind Caddy, deployed over SSH by a GitHub Actions job that
+holds no repo permissions and can run only one fixed command on the
+server.</p>
+<p><strong>The assistant is deliberately the predictable kind: grounded,
+not fine-tuned, and always in sync with the live catalogue.</strong>
+Each request flattens that catalogue into one compact line per product
+behind a 60s cache and pins it into a system prompt that forbids
+inventing prices and hard-codes the only two legal URL shapes (LLMs
+cheerfully guess <code>/products/monitors</code>, which 404s). So a
+price edit in the CRM reaches the bot’s answers within a cache window,
+and it cannot quote a number that isn’t in the database. The provider
+key never reaches the browser, and each completion logs one structured
+line, so a truncated answer is diagnosable rather than guessed at.</p>
 <ul>
-<li><strong>Role:</strong> Solo. Site, CRM, assistant, VPS, domain and
-DNS.</li>
+<li><strong>Role:</strong> Solo. Site, CRM, assistant, VPS, domain, DNS
+and mailboxes.</li>
 <li><strong>Tools:</strong> Next.js 16 (App Router), React 19,
 TypeScript, Tailwind CSS v4, Payload CMS 3, PostgreSQL 17, Drizzle
 migrations, Nodemailer/SMTP, sharp, Motion, Docker Compose, Caddy,
@@ -335,10 +338,12 @@ Proximity-Based Social Discovery <span class="tag">Mobile app</span>
 <!-- year: 2025 | tags: mobile, react-native, realtime, backend, redis, docker, product | featured: true -->
 
 <p><strong>Ultra-Wideband was the bet, and the hardware wasn’t
-ready.</strong> The idea was mine: you are on a subway and the person
-across from you is reading a book you love, and there is no socially
-cheap way to say so. AirConnect was the icebreaker: ping the one person
-in your line of sight, so the first move costs nothing.</p>
+ready.</strong> A friend and I wanted to start a company, and this was
+my idea. You are on a subway and the person across from you is reading a
+book you love. You want to say something, but the only options are
+walking up to a stranger or saying nothing, so you say nothing.
+AirConnect made the first move small: ping the one person in your line
+of sight, and let them ignore it if they want.</p>
 <p>That premise needs direction, not distance. UWB is the only widely
 shipped radio that gives angle of arrival rather than just range, and
 “that person, over there” is an angle problem. Bluetooth knows someone
@@ -351,18 +356,15 @@ app, and a clear answer to why the idea doesn’t survive current hardware
 and platform policy.</p>
 <p>An Expo/React Native client and a Node + Socket.IO backend: nearby
 discovery, matching, chat, and live location sharing on a map, with
-Redis as the primary datastore. Binh built the foundation and owned the
-map/GPS and chat features. <strong>I owned the backend and
-infrastructure</strong>: Docker/Compose, then restructuring a 2,500-line
-single-file Express server into controllers, services and routes with a
-PostgreSQL migration path alongside Redis, plus the
-welcome/signup/onboarding flow and a polish pass over Binh’s map
-(marker-flicker fix, <code>DirectionMarker</code> and compass
-heading).</p>
+Redis as the primary datastore. My friend built the Expo foundation and
+owned the map/GPS and chat features. <strong>I owned the backend and
+infrastructure</strong>: Docker/Compose, identity and access management
+(IAM), a PostgreSQL migration path alongside Redis, and the
+welcome/signup/onboarding flow, plus debugging help on the map
+(marker-flicker fix and compass heading).</p>
 <ul>
 <li><strong>Role:</strong> Two-person team. I owned the backend,
-infrastructure and the onboarding flow; Binh owned the map/GPS and
-chat.</li>
+infrastructure and IAM; my friend owned the map/GPS and chat.</li>
 <li><strong>Tools:</strong> Expo, React Native, TypeScript, Node.js,
 Express, Socket.IO, Redis, PostgreSQL, Docker Compose, cloudflared</li>
 </ul>
@@ -389,12 +391,18 @@ once: there is no API key to hand a non-technical user, and drafts being
 rewritten never leave the machine. It ships as a one-click executable
 for Windows and macOS, with grammar and spelling correction and
 English→Korean translation as the actions implemented.</p>
+<p>Any local model works; the recommended default is Qwen3.5-4B, small
+enough to run on an ordinary laptop. The same idea later became
+<strong>a shipped product at the startup I work at</strong>, SamuGen
+Plugin.</p>
 <ul>
 <li><strong>Role:</strong> Solo.</li>
 <li><strong>Tools:</strong> ElectronJS, ReactJS, robotJS, Ollama</li>
 <li><strong>Links:</strong> <a
 href="https://github.com/bibekyess/B-Assist">GitHub</a> · <a
-href="https://github.com/bibekyess/B-Assist/blob/main/src/assets/demo.gif">Demo</a></li>
+href="https://github.com/bibekyess/B-Assist/blob/main/src/assets/demo.gif">Demo</a>
+· <a href="https://ondevice.neoali.com/samugen-plugin">SamuGen
+Plugin</a></li>
 </ul>
 <h2
 id="renameify-content-aware-pdf-batch-renamer-desktop-app-2024">ReNameify:
@@ -404,14 +412,13 @@ Content-Aware PDF Batch Renamer <span class="tag">Desktop app</span>
 
 <p><strong>Written for one real user, not a spec.</strong> My sister was
 renaming exported PDFs by hand (opening each one, reading the header,
-retyping it), so I sat with her, watched the actual workflow, and
-shipped a one-click Windows installer that does it in a folder-at-a-time
-pass. It extracts each PDF’s text, then scores lines with a
-header-detection heuristic that rejects the things that look like titles
-but aren’t: page numbers (<code>page 12</code>, <code>- 12 -</code>),
-sentences ending in a full stop, lines that are mostly punctuation, and
-anything outside a sane length band. The heuristic is Korean-aware,
-since half her documents were in Korean.</p>
+retyping it), so she talked with me, and I watched the actual workflow,
+and shipped a one-click Windows installer that does it in a
+folder-at-a-time pass. It extracts each PDF’s text, then scores lines
+with a header-detection heuristic that rejects the things that look like
+titles but aren’t: page numbers (<code>page 12</code>,
+<code>- 12 -</code>), sentences ending in a full stop, lines that are
+mostly punctuation, and anything outside a defined length range.</p>
 <p><strong>Trust mattered more than accuracy here.</strong> Nothing is
 renamed in place. Originals stay untouched and copies land in a
 <code>renamed_files/</code> subfolder, a PDF that fails to parse

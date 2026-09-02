@@ -69,25 +69,27 @@ One to three paragraphs of prose. What it is, what you did, what came out of it.
 *Products, designed and built end to end.*
 
 ## KhururuAI: Work in Flow <span class="tag">Web app</span> <span class="year">(2026)</span>
-<!-- year: 2026 | tags: agentic-ai, llm, platform, langgraph, rag, microservices | featured: true -->
+<!-- year: 2026 | tags: agentic-ai, llm, langgraph, rag, microservices | featured: true -->
 
-**The point of this project is access.** Capable AI tools price out exactly the
-people who would gain most from them, while every major provider (Groq,
-Cerebras, NVIDIA, Google, Mistral) gives away a free tier that goes unclaimed
-because claiming it means holding an API key. KhururuAI pools that free capacity
-into a product anyone can just open and use: no payment, no API key, and no
-account at all for the first five turns. It runs today on my own pooled keys,
-roughly **2.3B tokens** of budget; the version I'm working toward provisions each
-user's *own* free tier at sign-in, so the ceiling scales with users instead of
-being divided among them.
+**The point of this project is access.** Capable AI tools price out the people
+who would gain most from them, while every major provider (Groq, Cerebras,
+NVIDIA, Google, Mistral) gives away a free tier that goes unclaimed because
+claiming it means holding an API key. KhururuAI pools that free capacity into a
+product anyone can just open and use: no payment, no API key, no account at all
+for the first five turns. It runs today on my own pooled keys, roughly **2.3B
+tokens** of budget; the version I'm working toward provisions each user's *own*
+free tier at sign-in, so the ceiling scales with users instead of being divided
+among them, and extends the agents to Nepali language work: drafting, and
+filling out forms in Nepali.
 
 A user writes what they want in plain language, an LLM router picks one of six
 specialists, and that specialist returns the finished thing: a researched answer
 with live citations, a slide deck, a PDF, working code, an image, or ordinary
 conversation. Uploaded documents are parsed, embedded and retrieved with
-page-accurate citations. Turns stream over SSE as typed events, so the interface
-names the specialist at ~1–2s and the model that is writing before the first
-token exists.
+page-accurate citations, **PDF, DOCX, HWP and HWPX alike**, so the formats people
+actually receive are not a reason to be locked out. Turns stream over SSE as
+typed events, so the interface names the specialist at ~1–2s and the model that
+is writing before the first token exists.
 
 Staying free without falling over is the engineering problem. One
 OpenAI-compatible gateway fronts every provider, collapsing three vendor SDKs
@@ -138,55 +140,54 @@ built it**.
 
 - **Role:** Solo. API research, agent and tool design, backend and frontend.
 - **Tools:** Python, FastAPI, Pydantic v2, MCP (Model Context Protocol), Vega-Lite, vis-network, Server-Sent Events, Docker Compose, Caddy, pytest, uv
-- **ML/Algorithms:** Tool-calling agent loop with server-side state handles (no numeric values in context); three-tier exact-count resolution over a non-aggregating API; deterministic data-shape → chart-type selection; entity-normalized co-occurrence network construction; provider-swappable LLM layer (OpenAI / Anthropic)
+- **ML/Algorithms:** Tool-calling agent loop with server-side state handles (no numeric values in context); three-tier exact-count resolution over a non-aggregating API; deterministic data-shape → chart-type selection; entity-normalized co-occurrence network construction; LLM access through the same OpenAI-compatible gateway as KhururuAI, so it runs on pooled free-tier
 - **Links:** [charak.khururu.com](https://charak.khururu.com) · [GitHub](https://github.com/bibekyess/Query-to-Visualization)
 
 ## Bintech International <span class="tag">Web app</span> <span class="year">(2026)</span>
 <!-- year: 2026 | tags: full-stack, nextjs, payload-cms, llm, self-hosted, devops | featured: true -->
 
 **Built to survive being handed over.** Bintech is a B2B hardware supplier in
-Nepal. I shipped the whole thing solo: public site, staff CRM, AI assistant, and
-the server it runs on. Nobody there writes code, so the design is only correct if a
-salesperson can add a product, publish it and answer a customer without me. That
-put the catalogue in Payload CMS 3 over Postgres with real access control
-(anonymous reads constrained *by query* to published, staff see drafts) and admin
-copy written for the person typing into it. Inquiries invert the usual
-permissions: the public creates but can't read, staff read but the submitted
-fields are read-only, so the only editable thing is the New → Contacted → Closed
-status.
+Nepal, and I built all of it: site, CRM, assistant, server. Nobody there writes
+code, so the design is only correct if a salesperson can add a product, publish
+it and answer a customer without me. So the catalogue lives in Payload CMS 3 on
+Postgres: staff add and publish products from a browser admin panel, with the
+field labels written for a salesperson rather than for me. Who can see what is
+enforced inside the database query rather than filtered out in code afterwards,
+so an unpublished draft is never fetched for a visitor at all. Inquiries work
+the opposite way: anyone can submit one, nobody outside the company can read
+them, and staff can read but not edit what the customer wrote. The only
+editable field is the status, New → Contacted → Closed.
 
-Failure modes took most of the attention. Every catalogue query falls back to a
-static array, so the image builds with no database and a Postgres outage degrades
-to the seed catalogue instead of a blank page; inquiry emails fire from a
-post-persist hook, so an SMTP outage costs a notification, never a lead.
+The site is built to keep working when its dependencies don't: every catalogue
+query falls back to a built-in list of products, so a Postgres outage degrades
+to that list instead of a blank page, and inquiry emails are sent only after the
+lead is saved to the database, so a mail outage costs a notification, never a
+lead. It self-hosts on one VPS via Docker Compose behind Caddy, deployed over
+SSH by a GitHub Actions job that holds no repo permissions and can run only one
+fixed deploy command on the server.
 
-The assistant is deliberately the boring kind. Each request flattens the live
-catalogue into one compact line per product behind a 60s cache and pins it into a
-guardrailed system prompt that forbids inventing prices and hard-codes the only two
-legal URL shapes (LLMs cheerfully guess `/products/monitors`, which 404s). Answers
-stream back as plain-text deltas; the provider key never reaches the browser,
-requests are per-IP rate-limited and length-capped, and each completion logs one
-structured line so a truncated answer is diagnosable from logs rather than guessed
-at.
-
-**Grounding beats fine-tuning here.** A price edit in the CRM is live in the bot's
+**The assistant is deliberately the predictable kind: grounded, not fine-tuned,
+and always in sync with the live catalogue.** Each request flattens that catalogue
+into one compact line per product behind a 60s cache and pins it into a system
+prompt that forbids inventing prices and
+hard-codes the only two legal URL shapes (LLMs cheerfully guess
+`/products/monitors`, which 404s). So a price edit in the CRM reaches the bot's
 answers within a cache window, and it cannot quote a number that isn't in the
-database. It self-hosts on one VPS via Docker Compose behind Caddy, deployed by a
-GitHub Actions job holding no repo permissions against an SSH key locked
-server-side to a forced command. Domain, DNS and company mailboxes are mine too.
+database.
 
-- **Role:** Solo. Site, CRM, assistant, VPS, domain and DNS.
+- **Role:** Solo. Site, CRM, assistant, VPS, domain, DNS and mailboxes.
 - **Tools:** Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4, Payload CMS 3, PostgreSQL 17, Drizzle migrations, Nodemailer/SMTP, sharp, Motion, Docker Compose, Caddy, GitHub Actions
-- **ML/Algorithms:** Catalogue-grounded LLM assistant. Live DB → compact token-efficient context behind a TTL cache, guardrailed system prompt (no invented prices/specs, closed link vocabulary, out-of-scope hand-off), SSE → plain-text delta re-emission, per-IP rate limiting and per-completion telemetry
+- **ML/Algorithms:** Catalogue-grounded LLM assistant. Live DB → compact token-efficient context behind a TTL cache, guardrailed system prompt (no invented prices/specs, closed link vocabulary, out-of-scope hand-off), SSE → plain-text delta re-emission
 - **Links:** [bintechint.com](https://bintechint.com)
 
 ## AirConnect: Proximity-Based Social Discovery <span class="tag">Mobile app</span> <span class="year">(2025)</span>
 <!-- year: 2025 | tags: mobile, react-native, realtime, backend, redis, docker, product | featured: true -->
 
-**Ultra-Wideband was the bet, and the hardware wasn't ready.** The idea was mine:
-you are on a subway and the person across from you is reading a book you love, and
-there is no socially cheap way to say so. AirConnect was the icebreaker: ping the
-one person in your line of sight, so the first move costs nothing.
+**Ultra-Wideband was the bet, and the hardware wasn't ready.** A friend and I
+wanted to start a company, and this was my idea. You are on a subway and the person across from you is reading a book you love.
+You want to say something, but the only options are walking up to a stranger or
+saying nothing, so you say nothing. AirConnect made the first move small: ping
+the one person in your line of sight, and let them ignore it if they want.
 
 That premise needs direction, not distance. UWB is the only widely shipped radio
 that gives angle of arrival rather than just range, and "that person, over there"
@@ -199,14 +200,13 @@ why the idea doesn't survive current hardware and platform policy.
 
 An Expo/React Native client and a Node + Socket.IO backend: nearby discovery,
 matching, chat, and live location sharing on a map, with Redis as the primary
-datastore. Binh built the foundation and owned the map/GPS and chat features. **I
-owned the backend and infrastructure**: Docker/Compose, then restructuring a
-2,500-line single-file Express server into controllers, services and routes with a
-PostgreSQL migration path alongside Redis, plus the welcome/signup/onboarding flow
-and a polish pass over Binh's map (marker-flicker fix, `DirectionMarker` and
-compass heading).
+datastore. My friend built the Expo foundation and owned the map/GPS and chat
+features. **I owned the backend and infrastructure**: Docker/Compose, identity
+and access management (IAM), a PostgreSQL migration path alongside Redis, and the
+welcome/signup/onboarding flow, plus debugging help on the map (marker-flicker
+fix and compass heading).
 
-- **Role:** Two-person team. I owned the backend, infrastructure and the onboarding flow; Binh owned the map/GPS and chat.
+- **Role:** Two-person team. I owned the backend, infrastructure and IAM; my friend owned the map/GPS and chat.
 - **Tools:** Expo, React Native, TypeScript, Node.js, Express, Socket.IO, Redis, PostgreSQL, Docker Compose, cloudflared
 
 ## B-Assist (Better-Assistant) <span class="tag">Desktop app</span> <span class="year">(2024)</span>
@@ -229,21 +229,24 @@ leave the machine. It ships as a one-click executable for Windows and macOS, wit
 grammar and spelling correction and English→Korean translation as the actions
 implemented.
 
+Any local model works; the recommended default is Qwen3.5-4B, small enough to
+run on an ordinary laptop. The same idea later became **a shipped
+product at the startup I work at**, SamuGen Plugin.
+
 - **Role:** Solo.
 - **Tools:** ElectronJS, ReactJS, robotJS, Ollama
-- **Links:** [GitHub](https://github.com/bibekyess/B-Assist) · [Demo](https://github.com/bibekyess/B-Assist/blob/main/src/assets/demo.gif)
+- **Links:** [GitHub](https://github.com/bibekyess/B-Assist) · [Demo](https://github.com/bibekyess/B-Assist/blob/main/src/assets/demo.gif) · [SamuGen Plugin](https://ondevice.neoali.com/samugen-plugin)
 
 ## ReNameify: Content-Aware PDF Batch Renamer <span class="tag">Desktop app</span> <span class="year">(2024)</span>
 <!-- year: 2024 | tags: desktop-app, electron, pdf, heuristics, non-technical-users | featured: true -->
 
 **Written for one real user, not a spec.** My sister was renaming exported PDFs by
-hand (opening each one, reading the header, retyping it), so I sat with her, watched
+hand (opening each one, reading the header, retyping it), so she talked with me, and I watched
 the actual workflow, and shipped a one-click Windows installer that does it in a
 folder-at-a-time pass. It extracts each PDF's text, then scores lines with a
 header-detection heuristic that rejects the things that look like titles but aren't:
 page numbers (`page 12`, `- 12 -`), sentences ending in a full stop, lines that are
-mostly punctuation, and anything outside a sane length band. The heuristic is
-Korean-aware, since half her documents were in Korean.
+mostly punctuation, and anything outside a defined length range.
 
 **Trust mattered more than accuracy here.** Nothing is renamed in place. Originals
 stay untouched and copies land in a `renamed_files/` subfolder, a PDF that fails to
