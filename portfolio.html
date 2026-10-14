@@ -38,7 +38,7 @@
 href="mailto:info@kc-bibek.com.np"><span>info@kc-bibek.com.np</span></a>
 · <a href="https://github.com/bibekyess">github.com/bibekyess</a> · <a
 href="https://www.linkedin.com/in/bibek44">linkedin.com/in/bibek44</a><br />Updated
-September 2026</p>
+October 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -216,6 +216,13 @@ guest allowance that deliberately never refills, and a per-IP daily
 budget that stops the endpoint being farmed. Five Node services plus
 Redis, Qdrant and MinIO behind a React SPA, reproducible with one Docker
 Compose command, with the decisions recorded as ADRs.</p>
+<p><strong>v2, coming soon, turns the assistant into a team.</strong>
+Instead of one chat that returns a finished artifact, you spin up
+several AI teammates, each driving its own virtual PC. The human never
+leaves the loop: you can step into any bot’s desktop at any moment to
+hand it a file, clear a CAPTCHA, or type in a password or anything else
+that should never pass through a model, then step back out and let the
+agent carry on from where you left it. An early preview is live.</p>
 <ul>
 <li><strong>Role:</strong> Solo. Architecture, all five services, the
 SPA and deployment.</li>
@@ -227,7 +234,8 @@ roster; multi-provider model routing with exhaustion fallback; document
 RAG (page-aware chunking, Gemini embeddings, score-floored retrieval
 under a hard context budget, validated citations)</li>
 <li><strong>Links:</strong> <a
-href="https://khururu.com">khururu.com</a></li>
+href="https://khururu.com">khururu.com</a> · <a
+href="https://sangi.khururu.com">v2 preview: sangi.khururu.com</a></li>
 </ul>
 <h2
 id="charak-medical-research-assistant-web-appmcp-server-2026">Charak:
@@ -304,8 +312,8 @@ outage degrades to that list instead of a blank page, and inquiry emails
 are sent only after the lead is saved to the database, so a mail outage
 costs a notification, never a lead. It self-hosts on one VPS via Docker
 Compose behind Caddy, deployed over SSH by a GitHub Actions job that
-holds no repo permissions and can run only one fixed command on the
-server.</p>
+holds no repo permissions and can run only one fixed deploy command on
+the server.</p>
 <p><strong>The assistant is deliberately the predictable kind: grounded,
 not fine-tuned, and always in sync with the live catalogue.</strong>
 Each request flattens that catalogue into one compact line per product
@@ -313,9 +321,7 @@ behind a 60s cache and pins it into a system prompt that forbids
 inventing prices and hard-codes the only two legal URL shapes (LLMs
 cheerfully guess <code>/products/monitors</code>, which 404s). So a
 price edit in the CRM reaches the bot’s answers within a cache window,
-and it cannot quote a number that isn’t in the database. The provider
-key never reaches the browser, and each completion logs one structured
-line, so a truncated answer is diagnosable rather than guessed at.</p>
+and it cannot quote a number that isn’t in the database.</p>
 <ul>
 <li><strong>Role:</strong> Solo. Site, CRM, assistant, VPS, domain, DNS
 and mailboxes.</li>
@@ -326,8 +332,8 @@ GitHub Actions</li>
 <li><strong>ML/Algorithms:</strong> Catalogue-grounded LLM assistant.
 Live DB → compact token-efficient context behind a TTL cache,
 guardrailed system prompt (no invented prices/specs, closed link
-vocabulary, out-of-scope hand-off), SSE → plain-text delta re-emission,
-per-IP rate limiting and per-completion telemetry</li>
+vocabulary, out-of-scope hand-off), SSE → plain-text delta
+re-emission</li>
 <li><strong>Links:</strong> <a
 href="https://bintechint.com">bintechint.com</a></li>
 </ul>

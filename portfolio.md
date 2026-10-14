@@ -2,7 +2,7 @@
 title: Portfolio
 author: Bibek K C
 subtitle: Full-Stack AI Engineer
-date: "[kc-bibek.com.np](https://kc-bibek.com.np) · [info@kc-bibek.com.np](mailto:info@kc-bibek.com.np) · [github.com/bibekyess](https://github.com/bibekyess) · [linkedin.com/in/bibek44](https://www.linkedin.com/in/bibek44)<br />Updated September 2026"
+date: "[kc-bibek.com.np](https://kc-bibek.com.np) · [info@kc-bibek.com.np](mailto:info@kc-bibek.com.np) · [github.com/bibekyess](https://github.com/bibekyess) · [linkedin.com/in/bibek44](https://www.linkedin.com/in/bibek44)<br />Updated October 2026"
 ---
 
 <!--
@@ -103,10 +103,17 @@ the endpoint being farmed. Five Node services plus Redis, Qdrant and MinIO behin
 a React SPA, reproducible with one Docker Compose command, with the decisions
 recorded as ADRs.
 
+**v2, coming soon, turns the assistant into a team.** Instead of one chat that
+returns a finished artifact, you spin up several AI teammates, each driving its
+own virtual PC. The human never leaves the loop: you can step into any bot's
+desktop at any moment to hand it a file, clear a CAPTCHA, or type in a password
+or anything else that should never pass through a model, then step back out and
+let the agent carry on from where you left it. An early preview is live.
+
 - **Role:** Solo. Architecture, all five services, the SPA and deployment.
 - **Tools:** Node.js, Express, LangGraph.js, React, TypeScript, MongoDB, Redis, Qdrant, MinIO/S3, Docker Compose, nginx, Firebase Auth, Tavily
 - **ML/Algorithms:** LLM intent routing across an agent roster; multi-provider model routing with exhaustion fallback; document RAG (page-aware chunking, Gemini embeddings, score-floored retrieval under a hard context budget, validated citations)
-- **Links:** [khururu.com](https://khururu.com)
+- **Links:** [khururu.com](https://khururu.com) · [v2 preview: sangi.khururu.com](https://sangi.khururu.com)
 
 ## Charak: Medical Research Assistant <span class="tag">Web app</span><span class="tag">MCP server</span> <span class="year">(2026)</span>
 <!-- year: 2026 | tags: agentic-ai, llm, tool-calling, retrieval, data-viz, mcp, fastapi | featured: true -->
