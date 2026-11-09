@@ -2,7 +2,7 @@
 title: Portfolio
 author: Bibek K C
 subtitle: Full-Stack AI Engineer
-date: "[kc-bibek.com.np](https://kc-bibek.com.np) · [info@kc-bibek.com.np](mailto:info@kc-bibek.com.np) · [github.com/bibekyess](https://github.com/bibekyess) · [linkedin.com/in/bibek44](https://www.linkedin.com/in/bibek44)<br />Updated October 2026"
+date: "[kc-bibek.com.np](https://kc-bibek.com.np) · [info@kc-bibek.com.np](mailto:info@kc-bibek.com.np) · [github.com/bibekyess](https://github.com/bibekyess) · [linkedin.com/in/bibek44](https://www.linkedin.com/in/bibek44)<br />Updated November 2026"
 ---
 
 <!--
@@ -114,6 +114,64 @@ let the agent carry on from where you left it. An early preview is live.
 - **Tools:** Node.js, Express, LangGraph.js, React, TypeScript, MongoDB, Redis, Qdrant, MinIO/S3, Docker Compose, nginx, Firebase Auth, Tavily
 - **ML/Algorithms:** LLM intent routing across an agent roster; multi-provider model routing with exhaustion fallback; document RAG (page-aware chunking, Gemini embeddings, score-floored retrieval under a hard context budget, validated citations)
 - **Links:** [khururu.com](https://khururu.com) · [v2 preview: sangi.khururu.com](https://sangi.khururu.com)
+
+## Nunchi: Live Meeting Transcription <span class="tag">Web app</span> <span class="year">(2026)</span>
+<!-- year: 2026 | tags: speech-to-text, llm, translation, self-hosted, privacy, vad | featured: true -->
+
+**I struggle with Korean, and technical meetings are where that struggle is
+most expensive.** Live-transcription tools like Cuckoo exist, but the meetings
+I most needed this for are often the ones I shouldn't send to a cloud service
+at all. So I rebuilt the interface I liked and pointed it at infrastructure I
+host myself: a speech-to-text model and a small language model running on my
+own cloud server, not a third-party cloud API. I use it to understand technical Korean
+meetings in English, live, without handing the audio or the content to a third
+party.
+
+In-browser VAD (Silero v5, running on ONNX in the browser) segments speech
+locally and queues short WAV clips, two in flight at a time, in speech order;
+each clip is transcribed by a **self-hosted Whisper server (Speaches)** and the
+Korean text is streamed through **Qwen on vLLM** for translation, sentence by
+sentence, behind an OpenAI-compatible API so the backend is swappable without
+touching the client. A "Processing" setting generalizes that further: point the
+app at my own servers, or at any OpenAI-compatible endpoint of your own, called
+straight from the browser.
+
+**Nothing is sent anywhere once a session ends.** Transcripts and a generated
+Korean/English meeting summary live only in the browser's IndexedDB, reload- and
+crash-proof, with no server-side storage, search or export, by design: this is
+for following a meeting, not archiving it. The VAD model itself (~**16 MB**) loads
+once on first mic tap and is cached for every session after.
+
+- **Role:** Solo.
+- **Tools:** Next.js 16, React 19, TypeScript, Tailwind CSS, Zustand, Dexie (IndexedDB), onnxruntime-web, Docker
+- **ML/Algorithms:** Silero VAD v5 for client-side speech segmentation; self-hosted Whisper (via Speaches) for Korean/English ASR; Qwen on vLLM for streamed translation and summarization, both behind a swappable OpenAI-compatible interface
+- **Links:** [nunchi.khururu.com](https://nunchi.khururu.com) · [GitHub](https://github.com/bibekyess/nunchi)
+
+## Marriage: Nepali Card Game Online <span class="tag">Web app</span> <span class="year">(2026)</span>
+<!-- year: 2026 | tags: realtime, socket-io, postgres, game-engine, pwa | featured: true -->
+
+**October and November are Nepal's festival season, Dashain and Tihar, and
+Marriage is the card game my family gathers around for both.** This year I was
+in Korea, and the apps that let them play a table over wifi couldn't come with
+me: card games get flagged as gambling software there, and the workaround, a
+second Apple account just to sideload one, felt like more friction than
+building the game myself. So I directed an AI agent through our actual house
+rules, and the result runs entirely in the browser: open a link, add it to the
+home screen in one or two taps, and it behaves like an installed app, no store,
+no account, nothing to approve. The server enforces every house rule and holds
+all hidden state, so a client has nothing to cheat with even if someone wanted
+to.
+
+Settlement resolves who-pays-whom in the fewest transactions across **11
+currencies** (NPR, KRW, INR, USD, AUD and more), with a shareable scorecard
+image at the end. Bots can fill an empty seat or take over any player's turns,
+and because games live in Postgres rather than memory, a refresh, a dropped
+signal or a server restart all put you back in your seat mid-hand.
+
+- **Role:** Solo.
+- **Tools:** Node.js, Express, Socket.IO, React, TypeScript, PostgreSQL, Vite, Tailwind CSS, shadcn/ui, Docker Compose
+- **ML/Algorithms:** Rule-validated show/declare search over hidden per-player hands; greedy minimum-transaction debt settlement across currencies; deterministic bot play with configurable think-delay
+- **Links:** [marriage.khururu.com](https://marriage.khururu.com) · [GitHub](https://github.com/bibekyess/marriage-card-game)
 
 ## Charak: Medical Research Assistant <span class="tag">Web app</span><span class="tag">MCP server</span> <span class="year">(2026)</span>
 <!-- year: 2026 | tags: agentic-ai, llm, tool-calling, retrieval, data-viz, mcp, fastapi | featured: true -->

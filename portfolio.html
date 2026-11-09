@@ -38,7 +38,7 @@
 href="mailto:info@kc-bibek.com.np"><span>info@kc-bibek.com.np</span></a>
 · <a href="https://github.com/bibekyess">github.com/bibekyess</a> · <a
 href="https://www.linkedin.com/in/bibek44">linkedin.com/in/bibek44</a><br />Updated
-October 2026</p>
+November 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -48,6 +48,14 @@ Projects</a>
 <li><a href="#khururuai-work-in-flow-web-app-2026"
 id="toc-khururuai-work-in-flow-web-app-2026">KhururuAI: Work in Flow
 <span class="tag">Web app</span>
+<span class="year">(2026)</span></a></li>
+<li><a href="#nunchi-live-meeting-transcription-web-app-2026"
+id="toc-nunchi-live-meeting-transcription-web-app-2026">Nunchi: Live
+Meeting Transcription <span class="tag">Web app</span>
+<span class="year">(2026)</span></a></li>
+<li><a href="#marriage-nepali-card-game-online-web-app-2026"
+id="toc-marriage-nepali-card-game-online-web-app-2026">Marriage: Nepali
+Card Game Online <span class="tag">Web app</span>
 <span class="year">(2026)</span></a></li>
 <li><a href="#charak-medical-research-assistant-web-appmcp-server-2026"
 id="toc-charak-medical-research-assistant-web-appmcp-server-2026">Charak:
@@ -236,6 +244,83 @@ under a hard context budget, validated citations)</li>
 <li><strong>Links:</strong> <a
 href="https://khururu.com">khururu.com</a> · <a
 href="https://sangi.khururu.com">v2 preview: sangi.khururu.com</a></li>
+</ul>
+<h2 id="nunchi-live-meeting-transcription-web-app-2026">Nunchi: Live
+Meeting Transcription <span class="tag">Web app</span>
+<span class="year">(2026)</span></h2>
+<!-- year: 2026 | tags: speech-to-text, llm, translation, self-hosted, privacy, vad | featured: true -->
+
+<p><strong>I struggle with Korean, and technical meetings are where that
+struggle is most expensive.</strong> Live-transcription tools like
+Cuckoo exist, but the meetings I most needed this for are often the ones
+I shouldn’t send to a cloud service at all. So I rebuilt the interface I
+liked and pointed it at infrastructure I host myself: a speech-to-text
+model and a small language model running on my own cloud server, not a
+third-party cloud API. I use it to understand technical Korean meetings
+in English, live, without handing the audio or the content to a third
+party.</p>
+<p>In-browser VAD (Silero v5, running on ONNX in the browser) segments
+speech locally and queues short WAV clips, two in flight at a time, in
+speech order; each clip is transcribed by a <strong>self-hosted Whisper
+server (Speaches)</strong> and the Korean text is streamed through
+<strong>Qwen on vLLM</strong> for translation, sentence by sentence,
+behind an OpenAI-compatible API so the backend is swappable without
+touching the client. A “Processing” setting generalizes that further:
+point the app at my own servers, or at any OpenAI-compatible endpoint of
+your own, called straight from the browser.</p>
+<p><strong>Nothing is sent anywhere once a session ends.</strong>
+Transcripts and a generated Korean/English meeting summary live only in
+the browser’s IndexedDB, reload- and crash-proof, with no server-side
+storage, search or export, by design: this is for following a meeting,
+not archiving it. The VAD model itself (~<strong>16 MB</strong>) loads
+once on first mic tap and is cached for every session after.</p>
+<ul>
+<li><strong>Role:</strong> Solo.</li>
+<li><strong>Tools:</strong> Next.js 16, React 19, TypeScript, Tailwind
+CSS, Zustand, Dexie (IndexedDB), onnxruntime-web, Docker</li>
+<li><strong>ML/Algorithms:</strong> Silero VAD v5 for client-side speech
+segmentation; self-hosted Whisper (via Speaches) for Korean/English ASR;
+Qwen on vLLM for streamed translation and summarization, both behind a
+swappable OpenAI-compatible interface</li>
+<li><strong>Links:</strong> <a
+href="https://nunchi.khururu.com">nunchi.khururu.com</a> · <a
+href="https://github.com/bibekyess/nunchi">GitHub</a></li>
+</ul>
+<h2 id="marriage-nepali-card-game-online-web-app-2026">Marriage: Nepali
+Card Game Online <span class="tag">Web app</span>
+<span class="year">(2026)</span></h2>
+<!-- year: 2026 | tags: realtime, socket-io, postgres, game-engine, pwa | featured: true -->
+
+<p><strong>October and November are Nepal’s festival season, Dashain and
+Tihar, and Marriage is the card game my family gathers around for
+both.</strong> This year I was in Korea, and the apps that let them play
+a table over wifi couldn’t come with me: card games get flagged as
+gambling software there, and the workaround, a second Apple account just
+to sideload one, felt like more friction than building the game myself.
+So I directed an AI agent through our actual house rules, and the result
+runs entirely in the browser: open a link, add it to the home screen in
+one or two taps, and it behaves like an installed app, no store, no
+account, nothing to approve. The server enforces every house rule and
+holds all hidden state, so a client has nothing to cheat with even if
+someone wanted to.</p>
+<p>Settlement resolves who-pays-whom in the fewest transactions across
+<strong>11 currencies</strong> (NPR, KRW, INR, USD, AUD and more), with
+a shareable scorecard image at the end. Bots can fill an empty seat or
+take over any player’s turns, and because games live in Postgres rather
+than memory, a refresh, a dropped signal or a server restart all put you
+back in your seat mid-hand.</p>
+<ul>
+<li><strong>Role:</strong> Solo.</li>
+<li><strong>Tools:</strong> Node.js, Express, Socket.IO, React,
+TypeScript, PostgreSQL, Vite, Tailwind CSS, shadcn/ui, Docker
+Compose</li>
+<li><strong>ML/Algorithms:</strong> Rule-validated show/declare search
+over hidden per-player hands; greedy minimum-transaction debt settlement
+across currencies; deterministic bot play with configurable
+think-delay</li>
+<li><strong>Links:</strong> <a
+href="https://marriage.khururu.com">marriage.khururu.com</a> · <a
+href="https://github.com/bibekyess/marriage-card-game">GitHub</a></li>
 </ul>
 <h2
 id="charak-medical-research-assistant-web-appmcp-server-2026">Charak:
