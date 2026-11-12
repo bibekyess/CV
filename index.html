@@ -195,19 +195,55 @@
                 <div class="mb-3">
                   <div class="h5 mb-1">KhururuAI: Work in flow <span class="text-muted h6">(<a
                         href="https://khururu.com" target="_blank">khururu.com</a>)</span></div>
-                  <div class="text-muted">A free-to-use AI platform where an LLM router dispatches requests to six specialists that turn plain-language intent into researched answers, decks, documents, code, and images. It runs on pooled free-tier capacity, so anyone can use it without paying or signing up.</div>
-                  <div class="text-muted mt-1"><b>Coming soon, v2:</b> AI teammates instead of a single assistant. You spin up a team of bots, each controlling its own virtual PC, and step into any bot's desktop at any time to hand over a file, clear a CAPTCHA, or type in something confidential, then let the agent finish the job. Early preview at <a href="https://sangi.khururu.com" target="_blank">sangi.khururu.com</a>.</div>
+                  <details class="project-more text-muted">
+                    <summary>A free AI platform where an LLM router sends each request to one of six specialists for answers, decks, documents, code and images.</summary>
+                    <div class="mt-1">It turns plain-language intent into researched output and runs on pooled free-tier capacity, so anyone can use it without paying or signing up.</div>
+                    <div class="mt-1"><b>Coming soon, v2:</b> AI teammates instead of a single assistant. You spin up a team of bots, each controlling its own virtual PC, and step into any bot's desktop at any time to hand over a file, clear a CAPTCHA, or type in something confidential, then let the agent finish the job. Early preview at <a href="https://sangi.khururu.com" target="_blank">sangi.khururu.com</a>.</div>
+                  </details>
+                </div>
+                <div class="mb-3">
+                  <div class="h5 mb-1">Nunchi: Live Meeting Transcription <span class="text-muted h6">(<a
+                        href="https://nunchi.khururu.com" target="_blank">nunchi.khururu.com</a>)</span></div>
+                  <details class="project-more text-muted">
+                    <summary>Live English for technical Korean meetings, on self-hosted models, so the audio never goes to a third-party cloud.</summary>
+                    <div class="mt-1">In-browser VAD segments speech locally, a self-hosted Whisper server transcribes it, and Qwen on vLLM streams the translation sentence by sentence. Transcripts and summaries stay only in the browser. <a
+                        href="https://github.com/bibekyess/nunchi" target="_blank">Code</a></div>
+                  </details>
+                </div>
+                <div class="mb-3">
+                  <div class="h5 mb-1">Marriage: Nepali Card Game Online <span class="text-muted h6">(<a
+                        href="https://marriage.khururu.com" target="_blank">marriage.khururu.com</a>)</span></div>
+                  <details class="project-more text-muted" id="marriage-more">
+                    <summary>The card game my family plays every Dashain and Tihar, rebuilt as an installable web app so I could still play it from Korea.</summary>
+                    <div class="mt-1">Card-game apps get flagged as gambling software in Korea, so I built ours with our actual house rules. The server holds all hidden state and enforces every rule, games survive refreshes and restarts from Postgres, and settlement works out who pays whom in the fewest transactions across 11 currencies. <a
+                        href="https://github.com/bibekyess/marriage-card-game" target="_blank">Code</a></div>
+                  </details>
+                  <div class="text-muted mt-2">Tihar got a one-day side build too: a KakaoTalk prank for Bhai Tika, where the gift card opens onto a spider and a Nepali folk song. <a
+                      href="https://github.com/bibekyess/happy-tihar" target="_blank">Code</a>
+                    </div>
+                  <figure class="project-reel mt-2 mb-0">
+                    <video data-src="videos/tihar-prank-reel.mp4" poster="images/tihar-prank-poster.jpg"
+                      muted loop playsinline preload="none" aria-label="Demo reel: sending and opening the Tihar prank cards"></video>
+                    <button type="button" class="reel-play" aria-label="Play the demo"><i class="fas fa-play"></i></button>
+                    <button type="button" class="reel-sound" aria-label="Turn sound on"><i class="fas fa-volume-mute"></i></button>
+                  </figure>
                 </div>
                 <div class="mb-3">
                   <div class="h5 mb-1">Bintech International <span class="text-muted h6">(<a
                         href="https://bintechint.com" target="_blank">bintechint.com</a>)</span></div>
-                  <div class="text-muted">Shipped a B2B hardware supplier's site solo, covering the storefront, a Payload CMS + Postgres CRM that non-technical staff run themselves, and an AI assistant grounded in the live catalogue so it only quotes real products, prices and stock. Self-hosted on Docker Compose behind Caddy, with the domain, DNS and email managed by me as well.</div>
+                  <details class="project-more text-muted">
+                    <summary>A B2B hardware supplier's storefront, staff-run CRM and catalogue-grounded AI assistant, shipped solo.</summary>
+                    <div class="mt-1">The Payload CMS + Postgres CRM is run by non-technical staff themselves, and the AI assistant is grounded in the live catalogue so it only quotes real products, prices and stock. Self-hosted on Docker Compose behind Caddy, with the domain, DNS and email managed by me as well.</div>
+                  </details>
                 </div>
                 <div>
                   <div class="h5 mb-1">Charak: Medical Research Assistant <span class="text-muted h6">(<a
                         href="https://charak.khururu.com" target="_blank">charak.khururu.com</a>)</span></div>
-                  <div class="text-muted">Answers natural-language clinical questions with cited responses, retrieving live from PubMed and ClinicalTrials.gov v2 and charting results. <a
-                      href="https://github.com/bibekyess/Query-to-Visualization" target="_blank">Code</a></div>
+                  <details class="project-more text-muted">
+                    <summary>Cited answers to clinical questions, retrieved live from PubMed and ClinicalTrials.gov.</summary>
+                    <div class="mt-1">A tool-calling agent orchestrates typed Python tools over ClinicalTrials.gov v2 records and charts the results when the question is about a distribution. The LLM never sees or writes a number, so it cannot report a wrong one. <a
+                        href="https://github.com/bibekyess/Query-to-Visualization" target="_blank">Code</a></div>
+                  </details>
                 </div>
               </div>
             </div>
@@ -533,6 +569,46 @@
   <script src="scripts/bootstrap.bundle.min.js?ver=1.2.0"></script>
   <script src="scripts/aos.js?ver=1.2.0"></script>
   <script src="scripts/main.js?ver=1.2.0"></script>
+  <script>
+    // Print every project's details, not just the one-liners.
+    window.addEventListener('beforeprint', function () {
+      document.querySelectorAll('details.project-more').forEach(function (d) { d.open = true; });
+    });
+    // Reels load only when scrolled near, play muted while on screen, and pause off it.
+    // play() is called by hand rather than via autoplay: only its promise says a browser
+    // refused, which is what keeps the play button up instead of a silently dead frame.
+    document.querySelectorAll('figure.project-reel').forEach(function (fig) {
+      var video = fig.querySelector('video');
+      var soundBtn = fig.querySelector('.reel-sound');
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var load = function () { if (!video.src) video.src = video.dataset.src; };
+      var start = function () { load(); video.play().catch(function () {}); };
+
+      video.addEventListener('playing', function () { fig.classList.add('is-playing'); });
+      video.addEventListener('pause', function () { fig.classList.remove('is-playing'); });
+      fig.querySelector('.reel-play').addEventListener('click', start);
+      // A visitor's own pause sticks: scrolling back doesn't restart the reel.
+      var userPaused = false;
+      fig.querySelector('.reel-play').addEventListener('click', function () { userPaused = false; });
+      video.addEventListener('click', function () {
+        userPaused = !video.paused;
+        userPaused ? video.pause() : start();
+      });
+      soundBtn.addEventListener('click', function () {
+        video.muted = !video.muted;
+        soundBtn.setAttribute('aria-label', video.muted ? 'Turn sound on' : 'Turn sound off');
+        soundBtn.firstElementChild.className = video.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+        if (!video.muted && video.paused) start();
+      });
+
+      if (!('IntersectionObserver' in window)) { load(); return; }
+      new IntersectionObserver(function (entries) {
+        var entry = entries[0];
+        if (entry.isIntersecting) { load(); if (!reduced && !userPaused) start(); }
+        else if (!video.paused) { video.pause(); }
+      }, { threshold: 0.5 }).observe(fig);
+    });
+  </script>
   <!--Start of Tawk.to Script-->
   <script type="text/javascript">
     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();

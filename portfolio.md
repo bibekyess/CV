@@ -168,6 +168,11 @@ image at the end. Bots can fill an empty seat or take over any player's turns,
 and because games live in Postgres rather than memory, a refresh, a dropped
 signal or a server restart all put you back in your seat mid-hand.
 
+Tihar got a smaller build too: a one-day KakaoTalk prank for Bhai Tika, where a
+gift card opens onto a spider and a Nepali folk song
+([demo video](https://github.com/bibekyess/happy-tihar/blob/main/videos/demo/tihar-prank-cards-portfolio-reel.mp4)
+· [GitHub](https://github.com/bibekyess/happy-tihar)).
+
 - **Role:** Solo.
 - **Tools:** Node.js, Express, Socket.IO, React, TypeScript, PostgreSQL, Vite, Tailwind CSS, shadcn/ui, Docker Compose
 - **ML/Algorithms:** Rule-validated show/declare search over hidden per-player hands; greedy minimum-transaction debt settlement across currencies; deterministic bot play with configurable think-delay

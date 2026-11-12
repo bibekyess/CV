@@ -128,3 +128,89 @@ footer a:not(.nav-link) {
 .disabled-link:focus {
     cursor: not-allowed;
 }
+
+/* Foldable project details: the summary is the one-liner, the rest opens on click. */
+.project-more summary {
+  list-style: none;
+  cursor: pointer; }
+
+.project-more summary::-webkit-details-marker {
+  display: none; }
+
+.project-more summary::after {
+  content: "more \25B8";
+  margin-left: 0.35em;
+  font-size: 0.875em;
+  color: #4A89DC;
+  white-space: nowrap; }
+
+.project-more[open] summary::after {
+  content: "less \25BE"; }
+
+.project-more summary:hover::after,
+.project-more summary:focus-visible::after {
+  text-decoration: underline; }
+
+/* Demo reel: a framed, height-reserved video with a play button and sound toggle. */
+.project-reel {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #1b1430;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12); }
+
+.project-reel video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer; }
+
+.project-reel button {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+  transition: background-color 0.15s ease, opacity 0.15s ease; }
+
+.project-reel button:hover,
+.project-reel button:focus-visible {
+  background: rgba(0, 0, 0, 0.75); }
+
+.reel-play {
+  top: 50%;
+  left: 50%;
+  width: 56px;
+  height: 56px;
+  font-size: 20px;
+  transform: translate(-50%, -50%); }
+
+.reel-play i {
+  margin-left: 3px; }
+
+.project-reel.is-playing .reel-play {
+  opacity: 0;
+  pointer-events: none; }
+
+.reel-sound {
+  right: 10px;
+  bottom: 10px;
+  width: 36px;
+  height: 36px;
+  font-size: 14px; }
+
+@media print {
+  .project-more summary::after {
+    display: none; }
+  .project-reel {
+    max-width: 320px;
+    box-shadow: none; }
+  .project-reel button {
+    display: none; } }
